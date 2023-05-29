@@ -5,3 +5,7 @@ export interface ParseResult<T extends Record<string, string> = {}> {
     default: string;
   } & T
 }
+
+export type StatementExportType = 'ExportNamedDeclaration' | 'ExportDefaultDeclaration';
+
+export type ExportType = 'named' | 'default';
