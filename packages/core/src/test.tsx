@@ -11,5 +11,19 @@ export const Test = defineComponent({
       type: Boolean,
       default: false,
     },
+    /**
+     * @description 当前选中的值
+     */
+    value: {
+      type: [String, Number],
+    },
+    /**
+     * @description 当前选中的值
+     * @default []
+     */
+    options: {
+      type: Array,
+      default: () => []
+    },
   },
 })

@@ -1,15 +1,16 @@
 import { readFile } from 'fs/promises'
 import { join } from 'path'
-import { parse } from '@babel/parser'
+import { parse as babelParse } from '@babel/parser'
 import doctrine from 'doctrine'
-import { getPropNameByCommentEndLine } from './utils'
+import { getPropInfoByCommentEndLine } from './utils'
 import type { ParseResult } from './types'
 
-main()
-async function main() {
-  const code = await readFile(join(process.cwd(), 'src/test.tsx'), 'utf8')
+parseByFile(join(process.cwd(), 'src/test.tsx')).then(parsed => {
+  console.log(parsed)
+})
 
-  const res = parse(code, {
+export function parse(code: string) {
+  const res = babelParse(code, {
     sourceType: 'module'
   })
   
@@ -18,23 +19,30 @@ async function main() {
     const endLine = c.loc?.end.line
     if (endLine) {
       const ast = doctrine.parse(`/*${c.value}\n*/`, { unwrap: true })
-      const name = getPropNameByCommentEndLine(res.program.body, endLine)
+      const info = getPropInfoByCommentEndLine(res.program.body, endLine)
       const parsedProperties = ast.tags.reduce<Record<string, string>>((acc, tag) => {
         acc[tag.title] = tag.description || ''
         return acc
       }, {})
 
-      if (name) {
+      if (info) {
         parsed.push({
-          name,
+          name: info.name,
+          type: info.type,
           properties: {
             description: parsedProperties['description'],
             default: parsedProperties['default'],
-          }
+          },
         })
       }
     }
   })
 
-  console.log(parsed)
+  return parsed
+}
+
+export async function parseByFile(filePath: string) {
+  const code = await readFile(filePath, 'utf8')
+
+  return parse(code)
 }

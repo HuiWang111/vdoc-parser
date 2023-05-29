@@ -6,6 +6,7 @@ import type {
   VariableDeclarator,
   CallExpression,
   ObjectProperty,
+  Identifier,
 } from '@babel/types'
 import type {
   StatementExportType,
@@ -40,7 +41,24 @@ function getPropertyByExpression(expression: ObjectExpression | null, propName: 
   return properties.find(p => p.type === 'ObjectProperty' && (p.key as any).name === propName) as ObjectProperty | null
 }
 
-export function getPropNameByCommentEndLine(
+function getPropertyTypeExpression(node: ObjectProperty | null) {
+  if (!node) {
+    return
+  }
+  
+  if (node.value.type === 'ArrayExpression') {
+    return node.value.elements.reduce<string[]>((acc, el) => {
+      if (el?.type === 'Identifier') {
+        acc.push(el.name.toLowerCase())
+      }
+      return acc
+    }, []).join(' | ')
+  } else if (node.value.type === 'Identifier') {
+    return node.value.name.toLowerCase()
+  }
+}
+
+export function getPropInfoByCommentEndLine(
   statements: Statement[],
   endLine: number,
   type: ExportType = 'named'
@@ -62,9 +80,15 @@ export function getPropNameByCommentEndLine(
     if (prop) {
       if (typeof prop.value === 'object') {
         const { properties } = prop.value as ObjectExpression
-        const found = properties.find(p => p.type === 'ObjectProperty' && p.loc?.start.line === endLine + 1) as ObjectProperty
-
-        return (found?.key as any).name
+        const found = properties.find(p => p.type === 'ObjectProperty' && p.loc?.start.line === endLine + 1 && p.key.type === 'Identifier') as ObjectProperty
+        const type = getPropertyByExpression(found?.value as ObjectExpression, 'type')
+        
+        if (found) {
+          return {
+            name: ((found.key as Identifier).name as string) || '',
+            type: getPropertyTypeExpression(type) || '',
+          }
+        }
       }
     }
   }
