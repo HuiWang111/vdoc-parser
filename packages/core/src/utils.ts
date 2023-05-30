@@ -56,6 +56,18 @@ function getPropertyTypeExpression(node: ObjectProperty | null) {
   } else if (node.value.type === 'Identifier') {
     return node.value.name.toLowerCase()
   }
+  
+  // TODO: 暂时无法实现读取 PropType 类型参数
+  // else if (node.value.type === 'TSAsExpression') {
+  //   if (node.value.typeAnnotation.type === 'TSTypeReference') {
+  //     if (node.value.typeAnnotation.typeParameters) {
+  //       const typeExpressionAst = node.value.typeAnnotation.typeParameters.params[0]
+  //       if (typeExpressionAst.type === 'TSFunctionType') {
+  //         console.log(node.value)
+  //       }
+  //     }
+  //   }
+  // }
 }
 
 export function getPropInfoByCommentEndLine(

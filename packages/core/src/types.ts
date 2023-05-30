@@ -1,11 +1,11 @@
-export interface ParseResult<T extends Record<string, string> = {}> {
+export interface BuiltinResult {
   name: string;
   type: string;
-  properties: {
-    description: string;
-    default: string;
-  } & T
+  description: string;
+  default: string;
 }
+
+export type ParsedResult<T extends Record<string, string> = {}> = BuiltinResult & T
 
 export type StatementExportType = 'ExportNamedDeclaration' | 'ExportDefaultDeclaration';
 

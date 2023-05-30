@@ -1,4 +1,5 @@
 import { defineComponent } from 'vue'
+import type { PropType } from 'vue'
 
 export const Test = defineComponent({
   name: 'Test',
@@ -20,10 +21,18 @@ export const Test = defineComponent({
     /**
      * @description 当前选中的值
      * @default []
+     * @type {{key: 'string[]'}}
      */
     options: {
       type: Array,
       default: () => []
+    },
+    /**
+     * @description 关闭后的回调
+     * @type {{key: '() => void'}}
+     */
+    afterClose: {
+      type: Function as PropType<() => void>,
     },
   },
 })
