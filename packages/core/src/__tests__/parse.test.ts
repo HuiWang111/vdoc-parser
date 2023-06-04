@@ -66,4 +66,12 @@ describe('test parseFile method', () => {
   it('test parse vue file with defineComponent', async () => {
     expect(await parseFile(join(__dirname, 'file/defineComponent.vue'))).toEqual(parsedResult)
   })
+
+  it('test parse vue file with defineProps', async () => {
+    expect(await parseFile(join(__dirname, 'file/defineProps.vue'))).toEqual(parsedResult)
+  })
+
+  it('test parse vue file with defineProps variable', async () => {
+    expect(await parseFile(join(__dirname, 'file/definePropsWithVariable.vue'))).toEqual(parsedResult)
+  })
 })

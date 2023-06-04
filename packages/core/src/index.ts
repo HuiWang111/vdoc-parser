@@ -6,17 +6,20 @@ import {
   parseCommentTags,
   parseExport,
   parseComponentOptions,
-  parseSfcContent,
+  parseSfc,
+  parseSetupScript,
 } from './parsers'
-import type { ParsedResult, Options } from './types'
+import type { ParsedResult, Options, InternalOptions, BuiltinResult } from './types'
 
 const legalExtsReg = /\.(vue|ts|tsx|js|jsx)$/
 const vueExtReg = /\.vue$/
 
 export function parse(code: string, {
-  exportType = 'default'
-}: Options = {
-  exportType: 'default'
+  exportType = 'default',
+  setup = false,
+}: InternalOptions = {
+  exportType: 'default',
+  setup: false,
 }) {
   const res = babelParse(code, {
     sourceType: 'module',
@@ -30,10 +33,17 @@ export function parse(code: string, {
     const endLine = c.loc?.end.line
     if (endLine) {
       const ast = doctrine.parse(`/*${c.value}\n*/`, { unwrap: true })
-      const options = parseExport(res.program.body, exportType)
-      const propInfo = options
-        ? parseComponentOptions(options, endLine)
-        : undefined
+      let propInfo: Pick<BuiltinResult, 'name' | 'type'> | undefined
+      
+      if (setup) {
+        propInfo = parseSetupScript(res.program.body, endLine)
+      } else {
+        const options = parseExport(res.program.body, exportType)
+        propInfo = options
+          ? parseComponentOptions(options, endLine)
+          : undefined
+      }
+
       const commentInfo = parseCommentTags(ast.tags)
       
       if (propInfo) {
@@ -58,10 +68,13 @@ export async function parseFile(filePath: string, options?: Options) {
   const source = await readFile(filePath, 'utf8')
 
   if (vueExtReg.test(filePath)) {
-    const script = parseSfcContent(source)
-    console.log(script)
+    const script = parseSfc(source)
+    
     if (script) {
-      return parse(script, options)
+      return parse(script.content, {
+        ...options,
+        setup: script.setup,
+      })
     }
   }
 

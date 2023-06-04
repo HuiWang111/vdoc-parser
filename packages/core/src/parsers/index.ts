@@ -6,4 +6,6 @@ export { parsePropType } from './parsePropType'
 
 export { parseExport } from './parseExport'
 
-export { parseSfcContent } from './parseSfcContent'
+export { parseSfc } from './parseSfc'
+
+export { parseSetupScript } from './parseSetupScript'

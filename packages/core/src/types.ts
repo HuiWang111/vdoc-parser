@@ -21,3 +21,12 @@ export type StatementExportDeclaration = ExportNamedDeclaration | ExportDefaultD
 export interface Options {
   exportType?: ExportType;
 }
+
+export interface InternalOptions extends Options {
+  setup?: boolean;
+}
+
+export interface SfcResult {
+  content: string;
+  setup: boolean;
+}
