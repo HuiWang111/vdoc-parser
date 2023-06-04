@@ -3,6 +3,7 @@ import {
   isIdentifier,
   isObjectProperty,
   isNode,
+  isObjectExpression,
 } from '@babel/types'
 import type {
   Statement,
@@ -49,9 +50,13 @@ export function getComponentOptions(
   let args: CallExpression['arguments'] | undefined
   
   for (const d of declarations) {
-    args = getCallExpressionArguments(d.init)
+    if (isCallExpression(d.init)) {
+      args = getCallExpressionArguments(d.init)
+    } else if (isObjectExpression(d.init)) {
+      args = [d.init]
+    }
 
-    if (args.length) {
+    if (args?.length) {
       return args[0]
     }
   }

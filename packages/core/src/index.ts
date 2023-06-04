@@ -1,17 +1,22 @@
 import { readFile } from 'fs/promises'
+import { extname } from 'path'
 import { parse as babelParse } from '@babel/parser'
 import doctrine from 'doctrine'
 import {
   parseCommentTags,
   parseExport,
   parseComponentOptions,
+  parseSfcContent,
 } from './parsers'
 import type { ParsedResult, Options } from './types'
 
+const legalExtsReg = /\.(vue|ts|tsx|js|jsx)$/
+const vueExtReg = /\.vue$/
+
 export function parse(code: string, {
-  exportType = 'named'
+  exportType = 'default'
 }: Options = {
-  exportType: 'named'
+  exportType: 'default'
 }) {
   const res = babelParse(code, {
     sourceType: 'module',
@@ -45,6 +50,20 @@ export function parse(code: string, {
   return parsed
 }
 
-export async function parseFile(filePath: string, options: Options) {
-  return parse(await readFile(filePath, 'utf8'), options)
+export async function parseFile(filePath: string, options?: Options) {
+  if (!legalExtsReg.test(filePath)) {
+    return Promise.reject(new Error(`Unexcept file extension: ${extname(filePath)}`))
+  }
+
+  const source = await readFile(filePath, 'utf8')
+
+  if (vueExtReg.test(filePath)) {
+    const script = parseSfcContent(source)
+    console.log(script)
+    if (script) {
+      return parse(script, options)
+    }
+  }
+
+  return parse(source, options)
 }

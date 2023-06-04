@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "dev": "ts-node ./src/index.ts"
+    "test": "jest --coverage",
+    "test:watch": "jest --watch"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +16,7 @@
     "@types/doctrine": "^0.0.5"
   },
   "dependencies": {
+    "@vue/compiler-sfc": "2.7.14",
     "doctrine": "^3.0.0"
   }
 }

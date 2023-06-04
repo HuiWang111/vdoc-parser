@@ -4,6 +4,7 @@ module.exports = {
   testEnvironment: 'node',
   testPathIgnorePatterns: [
     '/node_modules/',
-    '__tests__/code/'
+    '__tests__/code/',
+    '__tests__/file/',
   ]
 };
