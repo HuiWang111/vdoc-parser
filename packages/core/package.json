@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "dev": "ts-node ./src/index.ts"
   },
   "keywords": [],
@@ -13,8 +13,7 @@
   "devDependencies": {
     "@babel/parser": "^7.22.3",
     "@babel/types": "^7.22.3",
-    "@types/doctrine": "^0.0.5",
-    "ts-node": "^10.9.1"
+    "@types/doctrine": "^0.0.5"
   },
   "dependencies": {
     "doctrine": "^3.0.0"

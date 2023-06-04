@@ -1,17 +1,23 @@
 import { readFile } from 'fs/promises'
-import { join } from 'path'
 import { parse as babelParse } from '@babel/parser'
 import doctrine from 'doctrine'
-import { getPropInfoByCommentEndLine } from './utils'
-import type { ParsedResult } from './types'
+import {
+  parseCommentTags,
+  parseExport,
+  parseComponentOptions,
+} from './parsers'
+import type { ParsedResult, Options } from './types'
 
-parseByFile(join(process.cwd(), 'src/test.tsx')).then(parsed => {
-  console.log(parsed)
-})
-
-export function parse(code: string) {
+export function parse(code: string, {
+  exportType = 'named'
+}: Options = {
+  exportType: 'named'
+}) {
   const res = babelParse(code, {
     sourceType: 'module',
+    plugins: [
+      'typescript'
+    ]
   })
   
   const parsed: ParsedResult[] = []
@@ -19,38 +25,26 @@ export function parse(code: string) {
     const endLine = c.loc?.end.line
     if (endLine) {
       const ast = doctrine.parse(`/*${c.value}\n*/`, { unwrap: true })
-      const info = getPropInfoByCommentEndLine(res.program.body, endLine)
-      const parsedProperties = ast.tags.reduce<Record<string, string>>((acc, tag) => {
-        if (tag.title === 'type' && tag.type?.type === 'RecordType') {
-          for (const field of tag.type.fields) {
-            // @ts-expect-error
-            if (field.type === 'FieldType' && field.value?.type === 'StringLiteralType') {
-              acc[tag.title] = (field.value as any).value
-              break;
-            }
-          }
-        } else {
-          acc[tag.title] = tag.description || ''
-        }
-        return acc
-      }, {})
+      const options = parseExport(res.program.body, exportType)
+      const propInfo = options
+        ? parseComponentOptions(options, endLine)
+        : undefined
+      const commentInfo = parseCommentTags(ast.tags)
       
-      if (info) {
+      if (propInfo) {
         parsed.push({
-          name: info.name,
-          type: parsedProperties.type || info.type,
-          description: parsedProperties.description,
-          default: parsedProperties.default,
+          name: propInfo.name,
+          type: commentInfo.type || propInfo.type,
+          description: commentInfo.description,
+          default: commentInfo.default,
         })
       }
     }
   })
-
+  
   return parsed
 }
 
-export async function parseByFile(filePath: string) {
-  const code = await readFile(filePath, 'utf8')
-
-  return parse(code)
+export async function parseFile(filePath: string, options: Options) {
+  return parse(await readFile(filePath, 'utf8'), options)
 }

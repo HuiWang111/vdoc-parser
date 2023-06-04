@@ -1,3 +1,4 @@
+export const namedExportDefineComponent = `
 import { defineComponent } from 'vue'
 import type { PropType } from 'vue'
 
@@ -36,3 +37,4 @@ export const Test = defineComponent({
     },
   },
 })
+`

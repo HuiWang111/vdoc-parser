@@ -1,0 +1,1 @@
+export { namedExportDefineComponent } from './namedExportDefineComponent'

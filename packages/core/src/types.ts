@@ -1,3 +1,8 @@
+import type {
+  ExportDefaultDeclaration,
+  ExportNamedDeclaration,
+} from '@babel/types'
+
 export interface BuiltinResult {
   name: string;
   type: string;
@@ -10,3 +15,9 @@ export type ParsedResult<T extends Record<string, string> = {}> = BuiltinResult 
 export type StatementExportType = 'ExportNamedDeclaration' | 'ExportDefaultDeclaration';
 
 export type ExportType = 'named' | 'default';
+
+export type StatementExportDeclaration = ExportNamedDeclaration | ExportDefaultDeclaration;
+
+export interface Options {
+  exportType?: ExportType;
+}
