@@ -1,10 +1,16 @@
-import { isCallExpression, isIdentifier, isObjectProperty } from '@babel/types'
+import {
+  isCallExpression,
+  isIdentifier,
+  isObjectProperty,
+  isNode,
+} from '@babel/types'
 import type {
   Statement,
   ObjectExpression,
   VariableDeclarator,
   CallExpression,
   ObjectProperty,
+  Node,
 } from '@babel/types'
 import type {
   StatementExportType,
@@ -24,26 +30,38 @@ export function getExportDeclaration(statements: Statement[], statementExportTyp
   )
 }
 
+export function getCallExpressionArguments(callExpression: any, calleeName?: string) {
+  if (!isNode(callExpression) || !isCallExpression(callExpression)) return []
+
+  if (calleeName) {
+    return isIdentifier(callExpression.callee) && callExpression.callee.name === calleeName
+      ? callExpression.arguments
+      : []
+  }
+  return isIdentifier(callExpression.callee)
+    ? callExpression.arguments
+    : []
+}
+
 export function getComponentOptions(
   declarations: VariableDeclarator[],
 ): CallExpression['arguments'][0] | undefined {
   let args: CallExpression['arguments'] | undefined
+  
+  for (const d of declarations) {
+    args = getCallExpressionArguments(d.init)
 
-  declarations.forEach(d => {
-    const { init } = d
-
-    if (isCallExpression(init) && isIdentifier(init.callee) && init.callee.name === 'defineComponent') {
-      args = init.arguments
+    if (args.length) {
+      return args[0]
     }
-  })
-
-  return args?.[0]
+  }
 }
 
 export function getPropertyByExpression(expression: ObjectExpression | null, propName: string) {
   if (!expression) return null
 
-  const { properties } = expression
-
-  return properties.find(p => isObjectProperty(p) && isIdentifier(p.key) && p.key.name === propName) as ObjectProperty | null
+  return expression.properties
+    .find(p => isObjectProperty(p)
+      && isIdentifier(p.key)
+      && p.key.name === propName) as ObjectProperty | null
 }
