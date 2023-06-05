@@ -11,7 +11,7 @@ import type { Statement } from '@babel/types'
 export function parseSetupScript(
   statements: Statement[],
   commentEndLine: number,
-): Pick<BuiltinResult, 'name' | 'type'> | undefined {
+): Pick<BuiltinResult, 'name' | 'type' | 'default'> | undefined {
   for (const statement of statements) {
     if (isExpressionStatement(statement)) {
       const args = getCallExpressionArguments(statement.expression, 'defineProps')

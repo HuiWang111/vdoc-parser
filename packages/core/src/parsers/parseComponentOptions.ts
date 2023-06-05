@@ -9,7 +9,7 @@ import type { ObjectExpression } from '@babel/types'
 export function parseComponentOptions(
   options: ObjectExpression,
   commentEndLine: number,
-): Pick<BuiltinResult, 'name' | 'type'> | undefined {
+): Pick<BuiltinResult, 'name' | 'type' | 'default'> | undefined {
   const props = getPropertyByExpression(options, 'props')
 
   if (!props) return

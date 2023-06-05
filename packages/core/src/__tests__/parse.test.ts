@@ -20,19 +20,43 @@ const parsedResult = [
     name: 'value',
     type: 'string | number',
     description: '当前选中的值',
-    default: undefined,
+    default: '',
   },
   {
-    name: 'options',
+    name: 'emptyOptions',
     type: 'string[]',
-    description: '当前选中的值',
+    description: '选项列表，默认为空数组',
     default: '[]',
   },
   {
     name: 'afterClose',
     type: '() => void',
     description: '关闭后的回调',
-    default: undefined,
+    default: '() => {}',
+  },
+  {
+    name: 'emptyRecord',
+    type: 'Record<string, unknow>',
+    description: '数据对象，默认为空对象',
+    default: '{}',
+  },
+  {
+    name: 'options',
+    type: 'string[]',
+    description: '选项列表',
+    default: `['1', '2']`
+  },
+  {
+    name: 'count',
+    type: 'number',
+    description: '数量',
+    default: '1',
+  },
+  {
+    name: 'name',
+    type: 'string',
+    description: '名称',
+    default: "'xiaoming'",
   },
 ]
 
