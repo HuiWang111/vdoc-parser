@@ -1,4 +1,5 @@
 import { readFile } from 'fs/promises'
+import fs from 'fs'
 import { extname } from 'path'
 import { parse as babelParse } from '@babel/parser'
 import doctrine from 'doctrine'
@@ -8,6 +9,7 @@ import {
   parseComponentOptions,
   parseSfc,
   parseSetupScript,
+  parseProps,
 } from './parsers'
 import type { ParsedResult, Options, InternalOptions, BuiltinResult } from './types'
 
@@ -16,15 +18,18 @@ const vueExtReg = /\.vue$/
 
 export function parse(code: string, {
   exportType = 'default',
+  exportName,
+  type = 'component',
   setup = false,
 }: InternalOptions = {
   exportType: 'default',
+  type: 'component',
   setup: false,
 }) {
   const res = babelParse(code, {
     sourceType: 'module',
     plugins: [
-      'typescript'
+      'typescript',
     ]
   })
   
@@ -38,10 +43,21 @@ export function parse(code: string, {
       if (setup) {
         propInfo = parseSetupScript(res.program.body, endLine)
       } else {
-        const options = parseExport(res.program.body, exportType)
-        propInfo = options
-          ? parseComponentOptions(options, endLine)
-          : undefined
+        if (type === 'props') {
+          const props = parseExport(res.program.body, exportType, type, exportName)
+          
+          if (props) {
+            propInfo = parseProps(props, endLine)
+          }
+        } else if (type === 'component') {
+          // 这里遵循一个文件只写一个组件的原则，不支持通过 exportName 查找导出的组件
+          const options = parseExport(res.program.body, exportType, type)
+          propInfo = options
+            ? parseComponentOptions(options, endLine)
+            : undefined
+        } else {
+          throw new Error('Unknow parseType:' + type)
+        }
       }
 
       const commentInfo = parseCommentTags(ast.tags)
@@ -52,6 +68,7 @@ export function parse(code: string, {
           type: commentInfo.type || propInfo.type,
           description: commentInfo.description,
           default: commentInfo.default || propInfo.default,
+          version: commentInfo.version || '',
         })
       }
     }
@@ -66,6 +83,27 @@ export async function parseFile(filePath: string, options?: Options) {
   }
 
   const source = await readFile(filePath, 'utf8')
+
+  if (vueExtReg.test(filePath)) {
+    const script = parseSfc(source)
+    
+    if (script) {
+      return parse(script.content, {
+        ...options,
+        setup: script.setup,
+      })
+    }
+  }
+
+  return parse(source, options)
+}
+
+export function parseFileSync(filePath: string, options?: Options) {
+  if (!legalExtsReg.test(filePath)) {
+    return Promise.reject(new Error(`Unexcept file extension: ${extname(filePath)}`))
+  }
+
+  const source = fs.readFileSync(filePath, 'utf8')
 
   if (vueExtReg.test(filePath)) {
     const script = parseSfc(source)

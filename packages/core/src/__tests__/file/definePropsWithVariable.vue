@@ -61,6 +61,7 @@ const props = defineProps({
   },
   /**
    * @description 名称
+   * @version 1.2.1
    */
   name: {
     type: String,

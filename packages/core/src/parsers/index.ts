@@ -9,3 +9,5 @@ export { parseExport } from './parseExport'
 export { parseSfc } from './parseSfc'
 
 export { parseSetupScript } from './parseSetupScript'
+
+export { parseProps } from './parseProps'

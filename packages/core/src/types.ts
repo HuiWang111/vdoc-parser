@@ -8,6 +8,7 @@ export interface BuiltinResult {
   type: string;
   description: string;
   default: string;
+  version: string;
 }
 
 export type ParsedResult<T extends Record<string, string> = {}> = BuiltinResult & T
@@ -16,10 +17,14 @@ export type StatementExportType = 'ExportNamedDeclaration' | 'ExportDefaultDecla
 
 export type ExportType = 'named' | 'default';
 
+export type ParseType = 'component' | 'props';
+
 export type StatementExportDeclaration = ExportNamedDeclaration | ExportDefaultDeclaration;
 
 export interface Options {
   exportType?: ExportType;
+  exportName?: string;
+  type?: ParseType;
 }
 
 export interface InternalOptions extends Options {
