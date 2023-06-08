@@ -6,4 +6,9 @@ export const Test = {
   props: {
     ${propsCode}
   },
+  setup() {
+    return () => {
+      return <div></div>
+    }
+  },
 }`

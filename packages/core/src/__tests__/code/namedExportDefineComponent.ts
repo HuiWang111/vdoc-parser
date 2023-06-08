@@ -9,5 +9,10 @@ export const Test = defineComponent({
   props: {
     ${propsCode}
   },
+  setup() {
+    return () => {
+      return <div></div>
+    }
+  },
 })
 `

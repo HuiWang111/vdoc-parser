@@ -9,5 +9,10 @@ export default defineComponent({
   props: {
     ${propsCode}
   },
+  setup() {
+    return () => {
+      return <div></div>
+    }
+  },
 })
 `

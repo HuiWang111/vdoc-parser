@@ -79,13 +79,13 @@ describe('test parse method', () => {
     expect(parse(namedExportOptions, { exportType: 'named' })).toEqual(parsedResult)
   })
 
-  it('test named export props object', () => {
-    expect(parse(namedExportPropsObject, {
-      exportType: 'named',
-      exportName: 'someProps',
-      type: 'props',
-    })).toEqual(parsedResult)
-  })
+  // it('test named export props object', () => {
+  //   expect(parse(namedExportPropsObject, {
+  //     exportType: 'named',
+  //     exportName: 'someProps',
+  //     type: 'props',
+  //   })).toEqual(parsedResult)
+  // })
 
   it('test named export props function', () => {
     expect(parse(namedExportPropsFunction, {

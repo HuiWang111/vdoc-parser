@@ -30,6 +30,7 @@ export function parse(code: string, {
     sourceType: 'module',
     plugins: [
       'typescript',
+      'jsx',
     ]
   })
   

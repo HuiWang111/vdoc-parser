@@ -6,6 +6,11 @@ const Test = {
   props: {
     ${propsCode}
   },
+  setup() {
+    return () => {
+      return <div></div>
+    }
+  },
 }
 
 export default Test`
@@ -15,6 +20,11 @@ const Test = defineComponent({
   name: 'Test',
   props: {
     ${propsCode}
+  },
+  setup() {
+    return () => {
+      return <div></div>
+    }
   },
 })
 

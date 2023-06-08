@@ -6,4 +6,9 @@ export default {
   props: {
     ${propsCode}
   },
+  setup() {
+    return () => {
+      return <div></div>
+    }
+  },
 }`

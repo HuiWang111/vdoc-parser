@@ -26,9 +26,7 @@ export function getStatementExportType(type: ExportType): StatementExportType {
 }
 
 export function getExportDeclaration(statements: Statement[], statementExportType: StatementExportType) {
-  return statements.find(s => s.type === statementExportType) as (
-    StatementExportDeclaration | undefined
-  )
+  return statements.filter(s => s.type === statementExportType) as StatementExportDeclaration[]
 }
 
 export function getCallExpressionArguments(callExpression: any, calleeName?: string) {
