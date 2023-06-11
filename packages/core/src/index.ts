@@ -101,7 +101,7 @@ export async function parseFile(filePath: string, options?: Options) {
 
 export function parseFileSync(filePath: string, options?: Options) {
   if (!legalExtsReg.test(filePath)) {
-    return Promise.reject(new Error(`Unexcept file extension: ${extname(filePath)}`))
+    throw new Error(`Unexcept file extension: ${extname(filePath)}`)
   }
 
   const source = fs.readFileSync(filePath, 'utf8')
