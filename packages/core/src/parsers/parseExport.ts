@@ -4,17 +4,21 @@ import {
   getComponentOptions,
   getCallExpressionArguments,
 } from '../utils'
+import { resolveSpreadElements } from '../resolvers'
 import {
   isVariableDeclaration,
   isObjectExpression,
   isCallExpression,
   isIdentifier,
   isArrowFunctionExpression,
+  isSpreadElement,
 } from '@babel/types'
 import type {
   Statement,
   ObjectExpression,
   VariableDeclaration,
+  SpreadElement,
+  ObjectProperty,
 } from '@babel/types'
 import type {
   ExportType,
@@ -50,9 +54,35 @@ export function parseExport(
       if (declarator) {
         /**export const props = {} */
         if (isObjectExpression(declarator.init)) {
+          const spreadElements = declarator.init.properties.filter(p => isSpreadElement(p)) as SpreadElement[]
+          const spreadInits = resolveSpreadElements(spreadElements, statements)
+
+          if (spreadInits.length) {
+            declarator.init.properties = [
+              ...spreadInits.reduce<ObjectProperty[]>((acc, init) => {
+                acc = [...acc, ...init.properties as ObjectProperty[]]
+                return acc
+              }, []),
+              ...declarator.init.properties,
+            ]
+          }
+          
           return declarator.init
         /**export const props = () => ({}) */
         } else if (isArrowFunctionExpression(declarator.init) && isObjectExpression(declarator.init.body)) {
+          const spreadElements = declarator.init.body.properties.filter(p => isSpreadElement(p)) as SpreadElement[]
+          const spreadInits = resolveSpreadElements(spreadElements, statements)
+
+          if (spreadInits.length) {
+            declarator.init.body.properties = [
+              ...spreadInits.reduce<ObjectProperty[]>((acc, init) => {
+                acc = [...acc, ...init.properties as ObjectProperty[]]
+                return acc
+              }, []),
+              ...declarator.init.body.properties,
+            ]
+          }
+
           return declarator.init.body
         }
       }

@@ -1,0 +1,1 @@
+export { resolveSpreadElements } from './resolveSpreadElements'

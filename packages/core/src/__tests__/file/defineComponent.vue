@@ -70,6 +70,14 @@ export default defineComponent({
       type: String,
       default: 'xiaoming'
     },
+    /**
+     * @description 标签文本
+     */
+    label: String,
+    /**
+     * @description 当前选中的值简写
+     */
+    val: [String, Number],
   },
 })
 </script>

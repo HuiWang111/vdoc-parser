@@ -2,6 +2,7 @@ import {
   isObjectProperty,
   isIdentifier,
   isObjectExpression,
+  isArrayExpression,
 } from '@babel/types'
 import { getPropertyByExpression } from '../utils'
 import { parsePropType } from './parsePropType'
@@ -19,22 +20,47 @@ export function parseProps(
       && isIdentifier(p.key)
   })
 
-  if (prop && isObjectProperty(prop) && isObjectExpression(prop.value)) {
-    const propType = getPropertyByExpression(prop.value, 'type')
-    const defaultProperty = getPropertyByExpression(prop.value, 'default')
-    const parsedType = propType
-      ? parsePropType(propType)
-      : undefined
-    const defaultValue = defaultProperty
-      ? parseDefaultValue(defaultProperty)
-      : undefined
-    
-    return {
-      name: isIdentifier(prop.key)
-        ? prop.key.name
-        : '',
-      type: parsedType || '',
-      default: defaultValue || '',
+  if (prop && isObjectProperty(prop)) {
+    if (isObjectExpression(prop.value)) {
+      const propType = getPropertyByExpression(prop.value, 'type')
+      const defaultProperty = getPropertyByExpression(prop.value, 'default')
+      const parsedType = propType
+        ? parsePropType(propType)
+        : undefined
+      const defaultValue = defaultProperty
+        ? parseDefaultValue(defaultProperty)
+        : undefined
+      
+      return {
+        name: isIdentifier(prop.key)
+          ? prop.key.name
+          : '',
+        type: parsedType || '',
+        default: defaultValue || '',
+      }
+    } else if (isIdentifier(prop.value)) {
+      return {
+        name: isIdentifier(prop.key)
+          ? prop.key.name
+          : '',
+        type: prop.value.name.toLowerCase(),
+        default: '',
+      }
+    } else if (isArrayExpression(prop.value)) {
+      const type = prop.value.elements.reduce<string[]>((acc, el) => {
+        if (el?.type === 'Identifier') {
+          acc.push(el.name.toLowerCase())
+        }
+        return acc
+      }, []).join(' | ')
+
+      return {
+        name: isIdentifier(prop.key)
+          ? prop.key.name
+          : '',
+        type,
+        default: '',
+      }
     }
   }
 }

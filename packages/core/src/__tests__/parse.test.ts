@@ -3,7 +3,9 @@ import {
   namedExportDefineComponent,
   namedExportOptions,
   namedExportPropsObject,
+  namedExportPropsObjectWithSpread,
   namedExportPropsFunction,
+  namedExportPropsFunctionWithSpread,
   defaultExportDefineComponent,
   defaultExportOptions,
   defaultExportVariableOptions,
@@ -68,6 +70,20 @@ const parsedResult = [
     default: "'xiaoming'",
     version: '1.2.1',
   },
+  {
+    name: 'label',
+    type: 'string',
+    description: '标签文本',
+    default: '',
+    version: '',
+  },
+  {
+    name: 'val',
+    type: 'string | number',
+    description: '当前选中的值简写',
+    default: '',
+    version: '',
+  },
 ]
 
 describe('test parse method', () => {
@@ -79,13 +95,30 @@ describe('test parse method', () => {
     expect(parse(namedExportOptions, { exportType: 'named' })).toEqual(parsedResult)
   })
 
-  // it('test named export props object', () => {
-  //   expect(parse(namedExportPropsObject, {
-  //     exportType: 'named',
-  //     exportName: 'someProps',
-  //     type: 'props',
-  //   })).toEqual(parsedResult)
-  // })
+  it('test named export props object', () => {
+    expect(parse(namedExportPropsObject, {
+      exportType: 'named',
+      exportName: 'someProps',
+      type: 'props',
+    })).toEqual(parsedResult)
+  })
+
+  it('test named export props object with spread', () => {
+    expect(parse(namedExportPropsObjectWithSpread, {
+      exportType: 'named',
+      exportName: 'someProps',
+      type: 'props',
+    })).toEqual([
+      {
+        name: 'spreadKey',
+        type: 'string',
+        description: '测试展开运算符',
+        default: '',
+        version: '',
+      },
+      ...parsedResult,
+    ])
+  })
 
   it('test named export props function', () => {
     expect(parse(namedExportPropsFunction, {
@@ -93,6 +126,23 @@ describe('test parse method', () => {
       exportName: 'someProps',
       type: 'props',
     })).toEqual(parsedResult)
+  })
+
+  it('test named export props function with spread', () => {
+    expect(parse(namedExportPropsFunctionWithSpread, {
+      exportType: 'named',
+      exportName: 'someProps',
+      type: 'props',
+    })).toEqual([
+      {
+        name: 'userId',
+        type: 'number',
+        description: '用户id',
+        default: '',
+        version: '',
+      },
+      ...parsedResult,
+    ])
   })
 
   it('test default export defineComponent', () => {

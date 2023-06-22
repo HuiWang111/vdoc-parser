@@ -11,3 +11,7 @@ export { defaultExportVariableOptions, defaultExportVariableDefineComponent } fr
 export { namedExportPropsObject } from './namedExportPropsObject'
 
 export { namedExportPropsFunction } from './namedExportPropsFunction'
+
+export { namedExportPropsObjectWithSpread } from './namedExportPropsObjectWithSpread'
+
+export { namedExportPropsFunctionWithSpread } from './namedExportPropsFunctionWithSpread'
