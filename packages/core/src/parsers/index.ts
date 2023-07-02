@@ -11,3 +11,9 @@ export { parseSfc } from './parseSfc'
 export { parseSetupScript } from './parseSetupScript'
 
 export { parseProps } from './parseProps'
+
+export { parseCode } from './parseCode'
+
+export { parseFile } from './parseFile'
+
+export { parseFileSync } from './parseFileSync'

@@ -11,7 +11,7 @@ import {
   defaultExportVariableOptions,
   defaultExportVariableDefineComponent,
 } from './code'
-import { parse, parseFile, parseFileSync } from '..'
+import { parseCode, parseFile, parseFileSync } from '../parsers'
 
 const parsedResult = [
   {
@@ -88,15 +88,15 @@ const parsedResult = [
 
 describe('test parse method', () => {
   it('test named export defineComponent', () => {
-    expect(parse(namedExportDefineComponent, { exportType: 'named' })).toEqual(parsedResult)
+    expect(parseCode(namedExportDefineComponent, { exportType: 'named' })).toEqual(parsedResult)
   })
 
   it('test named export options', () => {
-    expect(parse(namedExportOptions, { exportType: 'named' })).toEqual(parsedResult)
+    expect(parseCode(namedExportOptions, { exportType: 'named' })).toEqual(parsedResult)
   })
 
   it('test named export props object', () => {
-    expect(parse(namedExportPropsObject, {
+    expect(parseCode(namedExportPropsObject, {
       exportType: 'named',
       exportName: 'someProps',
       type: 'props',
@@ -104,7 +104,7 @@ describe('test parse method', () => {
   })
 
   it('test named export props object with spread', () => {
-    expect(parse(namedExportPropsObjectWithSpread, {
+    expect(parseCode(namedExportPropsObjectWithSpread, {
       exportType: 'named',
       exportName: 'someProps',
       type: 'props',
@@ -121,7 +121,7 @@ describe('test parse method', () => {
   })
 
   it('test named export props function', () => {
-    expect(parse(namedExportPropsFunction, {
+    expect(parseCode(namedExportPropsFunction, {
       exportType: 'named',
       exportName: 'someProps',
       type: 'props',
@@ -129,7 +129,7 @@ describe('test parse method', () => {
   })
 
   it('test named export props function with spread', () => {
-    expect(parse(namedExportPropsFunctionWithSpread, {
+    expect(parseCode(namedExportPropsFunctionWithSpread, {
       exportType: 'named',
       exportName: 'someProps',
       type: 'props',
@@ -146,19 +146,19 @@ describe('test parse method', () => {
   })
 
   it('test default export defineComponent', () => {
-    expect(parse(defaultExportDefineComponent)).toEqual(parsedResult)
+    expect(parseCode(defaultExportDefineComponent)).toEqual(parsedResult)
   })
 
   it('test default export options', () => {
-    expect(parse(defaultExportOptions)).toEqual(parsedResult)
+    expect(parseCode(defaultExportOptions)).toEqual(parsedResult)
   })
 
   it('test default export variable options', () => {
-    expect(parse(defaultExportVariableOptions)).toEqual(parsedResult)
+    expect(parseCode(defaultExportVariableOptions)).toEqual(parsedResult)
   })
 
   it('test default export variable defineComponent', () => {
-    expect(parse(defaultExportVariableDefineComponent)).toEqual(parsedResult)
+    expect(parseCode(defaultExportVariableDefineComponent)).toEqual(parsedResult)
   })
 })
 

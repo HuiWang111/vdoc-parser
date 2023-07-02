@@ -16,8 +16,8 @@ vdoc-parser 支持解析 `vue` `js` `jsx` `ts` `tsx` 格式的文件；支持从
 import { join } from 'path'
 import { parseFile } from 'vdoc-parser'
 
-parseFile(join(__dirname, 'component.vue'))
-parseFile(join(__dirname, 'component.tsx'))
+await parseFile(join(__dirname, 'component.vue'))
+await parseFile(join(__dirname, 'component.tsx'))
 ```
 
 ### 2. `export default defineComponent({})`
@@ -27,8 +27,8 @@ parseFile(join(__dirname, 'component.tsx'))
 import { join } from 'path'
 import { parseFile } from 'vdoc-parser'
 
-parseFile(join(__dirname, 'component.vue'))
-parseFile(join(__dirname, 'component.tsx'))
+await parseFile(join(__dirname, 'component.vue'))
+await parseFile(join(__dirname, 'component.tsx'))
 ```
 
 ### 4. `export const Comp = defineComponent({})`
@@ -40,10 +40,10 @@ parseFile(join(__dirname, 'component.tsx'))
 import { join } from 'path'
 import { parseFile } from 'vdoc-parser'
 
-parseFile(join(__dirname, 'component.vue'), {
+await parseFile(join(__dirname, 'component.vue'), {
   exportType: 'named',
 })
-parseFile(join(__dirname, 'component.tsx'), {
+await parseFile(join(__dirname, 'component.tsx'), {
   exportType: 'named',
 })
 ```
@@ -55,7 +55,7 @@ parseFile(join(__dirname, 'component.tsx'), {
 import { join } from 'path'
 import { parseFile } from 'vdoc-parser'
 
-parseFile(join(__dirname, 'component.vue'))
+await parseFile(join(__dirname, 'component.vue'))
 ```
 
 ### 5. `export const someProps = {}`
@@ -65,7 +65,7 @@ parseFile(join(__dirname, 'component.vue'))
 import { join } from 'path'
 import { parseFile } from 'vdoc-parser'
 
-parseFile(join(__dirname, 'props.ts'), {
+await parseFile(join(__dirname, 'props.ts'), {
   exportType: 'named',
   exportName: 'someProps', // 也可以不配置这个，默认会解析第一个 named export 变量
   type: 'props',
@@ -79,7 +79,7 @@ parseFile(join(__dirname, 'props.ts'), {
 import { join } from 'path'
 import { parseFile } from 'vdoc-parser'
 
-parseFile(join(__dirname, 'props.ts'), {
+await parseFile(join(__dirname, 'props.ts'), {
   exportType: 'named',
   exportName: 'someProps', // 也可以不配置这个，默认会解析第一个 named export 变量
   type: 'props',
