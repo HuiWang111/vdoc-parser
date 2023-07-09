@@ -17,3 +17,7 @@ export { parseCode } from './parseCode'
 export { parseFile } from './parseFile'
 
 export { parseFileSync } from './parseFileSync'
+
+export { parseTypes } from './parseTypes'
+
+export { parseTypesFileSync } from './parseTypesFileSync'

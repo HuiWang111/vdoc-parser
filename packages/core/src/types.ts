@@ -35,3 +35,7 @@ export interface SfcResult {
   content: string;
   setup: boolean;
 }
+
+export interface ParseTypesOptions {
+  names?: string[];
+}

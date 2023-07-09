@@ -10,8 +10,9 @@ import {
   defaultExportOptions,
   defaultExportVariableOptions,
   defaultExportVariableDefineComponent,
+  typesCode,
 } from './code'
-import { parseCode, parseFile, parseFileSync } from '../parsers'
+import { parseCode, parseFile, parseFileSync, parseTypes } from '../parsers'
 
 const parsedResult = [
   {
@@ -187,5 +188,15 @@ describe('test parseFileSync method', () => {
 
   it('test parse vue file with defineProps variable', async () => {
     expect(parseFileSync(join(__dirname, 'file/definePropsWithVariable.vue'))).toEqual(parsedResult)
+  })
+})
+
+describe('test parseTypes method', () => {
+  it('parseTypes method should work', () => {
+    expect(parseTypes(typesCode)).toMatchSnapshot()
+
+    expect(parseTypes(typesCode, {
+      names: ['A', 'D']
+    })).toMatchSnapshot()
   })
 })

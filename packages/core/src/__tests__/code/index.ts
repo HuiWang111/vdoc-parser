@@ -15,3 +15,5 @@ export { namedExportPropsFunction } from './namedExportPropsFunction'
 export { namedExportPropsObjectWithSpread } from './namedExportPropsObjectWithSpread'
 
 export { namedExportPropsFunctionWithSpread } from './namedExportPropsFunctionWithSpread'
+
+export { typesCode } from './typesCode'

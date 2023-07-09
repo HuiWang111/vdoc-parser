@@ -1,6 +1,6 @@
 {
   "name": "vdoc-parser",
-  "version": "1.0.0-beta.3",
+  "version": "1.0.0-beta.4",
   "description": "vue props parser",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -33,9 +33,11 @@
   "author": "kennys wang <kennys_wang@163.com>",
   "license": "ISC",
   "devDependencies": {
+    "@types/babel__core": "^7.20.1",
     "@types/doctrine": "^0.0.5"
   },
   "dependencies": {
+    "@babel/core": "^7.22.8",
     "@babel/parser": "^7.22.4",
     "@babel/types": "^7.22.4",
     "@vue/compiler-sfc": "2.7.14",
