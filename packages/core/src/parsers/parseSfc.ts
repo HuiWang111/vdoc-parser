@@ -9,13 +9,15 @@ export function parseSfc(source: string): SfcResult | undefined {
   if (sfcDescriptor.scriptSetup) {
     return {
       content: sfcDescriptor.scriptSetup.content,
-      setup: true
+      setup: true,
+      lang: sfcDescriptor.scriptSetup.lang,
     }
   }
   if (sfcDescriptor.script) {
     return {
       content: sfcDescriptor.script.content,
       setup: false,
+      lang: sfcDescriptor.script.lang
     }
   }
 }

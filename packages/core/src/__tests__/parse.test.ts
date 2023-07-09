@@ -12,7 +12,14 @@ import {
   defaultExportVariableDefineComponent,
   typesCode,
 } from './code'
-import { parseCode, parseFile, parseFileSync, parseTypes } from '../parsers'
+import {
+  parseCode,
+  parseFile,
+  parseFileSync,
+  parseTypes,
+  parseTypesFileSync,
+  parseTypesFile,
+} from '../parsers'
 
 const parsedResult = [
   {
@@ -198,5 +205,25 @@ describe('test parseTypes method', () => {
     expect(parseTypes(typesCode, {
       names: ['A', 'D']
     })).toMatchSnapshot()
+  })
+})
+
+describe('test parseTypesFileSync method', () => {
+  it('parseTypesFileSync should work with .vue file', () => {
+    expect(parseTypesFileSync(join(__dirname, 'file/typesInSfc.vue'))).toMatchSnapshot()
+  })
+
+  it('parseTypesFileSync should work with .vue file by names', () => {
+    expect(parseTypesFileSync(join(__dirname, 'file/typesInSfc.vue'), { names: ['Xiaoming'] })).toMatchSnapshot()
+  })
+})
+
+describe('test parseTypesFile method', () => {
+  it('parseTypesFile should work with .vue file', async () => {
+    expect(await parseTypesFile(join(__dirname, 'file/typesInSfc.vue'))).toMatchSnapshot()
+  })
+
+  it('parseTypesFile should work with .vue file by names', async () => {
+    expect(await parseTypesFile(join(__dirname, 'file/typesInSfc.vue'), { names: ['Xiaoming'] })).toMatchSnapshot()
   })
 })

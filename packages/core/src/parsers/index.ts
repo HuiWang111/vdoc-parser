@@ -21,3 +21,5 @@ export { parseFileSync } from './parseFileSync'
 export { parseTypes } from './parseTypes'
 
 export { parseTypesFileSync } from './parseTypesFileSync'
+
+export { parseTypesFile } from './parseTypesFile'

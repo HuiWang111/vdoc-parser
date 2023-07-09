@@ -17,3 +17,39 @@ exports[`test parseTypes method parseTypes method should work 2`] = `
 }
 export type D = C & number;"
 `;
+
+exports[`test parseTypesFile method parseTypesFile should work with .vue file 1`] = `
+"interface Person {
+  name: string;
+}
+type Xiaoming = Person & {
+  age: number;
+};
+export interface Animal {
+  fly: () => void;
+}"
+`;
+
+exports[`test parseTypesFile method parseTypesFile should work with .vue file by names 1`] = `
+"type Xiaoming = Person & {
+  age: number;
+};"
+`;
+
+exports[`test parseTypesFileSync method parseTypesFileSync should work with .vue file 1`] = `
+"interface Person {
+  name: string;
+}
+type Xiaoming = Person & {
+  age: number;
+};
+export interface Animal {
+  fly: () => void;
+}"
+`;
+
+exports[`test parseTypesFileSync method parseTypesFileSync should work with .vue file by names 1`] = `
+"type Xiaoming = Person & {
+  age: number;
+};"
+`;

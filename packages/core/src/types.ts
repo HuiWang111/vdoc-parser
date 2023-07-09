@@ -34,6 +34,7 @@ export interface InternalOptions extends Options {
 export interface SfcResult {
   content: string;
   setup: boolean;
+  lang?: string;
 }
 
 export interface ParseTypesOptions {

@@ -2,8 +2,9 @@ export {
   parseCode,
   parseFile,
   parseFileSync,
-  parseTypesFileSync,
   parseTypes,
+  parseTypesFileSync,
+  parseTypesFile,
 } from './parsers'
 
 export type {
