@@ -1,33 +1,49 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`test parseTypes method parseTypes method should work 1`] = `
-"interface A {
+"import type { VNode, VNodeData } from 'vue'
+
+interface A {
   name: string;
+  node: VNode;
 }
+
 export interface B {
   age: number;
 }
-type C = string | number;
+
+type C = string | number
+
 export type D = C & number;"
 `;
 
 exports[`test parseTypes method parseTypes method should work 2`] = `
-"interface A {
+"import type { VNode } from 'vue';
+interface A {
   name: string;
+  node: VNode;
 }
 export type D = C & number;"
 `;
 
 exports[`test parseTypesFile method parseTypesFile should work with .vue file 1`] = `
-"interface Person {
+"
+interface Person {
   name: string;
 }
+
 type Xiaoming = Person & {
   age: number;
-};
+}
+
 export interface Animal {
   fly: () => void;
-}"
+}
+
+export default {
+  name: 'Test'
+}
+"
 `;
 
 exports[`test parseTypesFile method parseTypesFile should work with .vue file by names 1`] = `
@@ -37,15 +53,23 @@ exports[`test parseTypesFile method parseTypesFile should work with .vue file by
 `;
 
 exports[`test parseTypesFileSync method parseTypesFileSync should work with .vue file 1`] = `
-"interface Person {
+"
+interface Person {
   name: string;
 }
+
 type Xiaoming = Person & {
   age: number;
-};
+}
+
 export interface Animal {
   fly: () => void;
-}"
+}
+
+export default {
+  name: 'Test'
+}
+"
 `;
 
 exports[`test parseTypesFileSync method parseTypesFileSync should work with .vue file by names 1`] = `

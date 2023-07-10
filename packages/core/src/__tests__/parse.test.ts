@@ -203,7 +203,7 @@ describe('test parseTypes method', () => {
     expect(parseTypes(typesCode)).toMatchSnapshot()
 
     expect(parseTypes(typesCode, {
-      names: ['A', 'D']
+      names: ['VNode', 'A', 'D']
     })).toMatchSnapshot()
   })
 })

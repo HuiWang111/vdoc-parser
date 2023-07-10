@@ -5,6 +5,8 @@ import {
   isTSTypeAliasDeclaration,
   isExportNamedDeclaration,
   isIdentifier,
+  isImportDeclaration,
+  isImportSpecifier,
 } from '@babel/types'
 import type { ParseTypesOptions } from '../types'
 
@@ -16,22 +18,31 @@ export function parseTypes(code: string, options?: ParseTypesOptions) {
     ]
   })
 
+  if (!options || !options.names) {
+    return code
+  }
+
+  const { names } = options
+
   const filteredBody = res.program.body.filter(node => {
     if (isTSInterfaceDeclaration(node) || isTSTypeAliasDeclaration(node)) {
-      if (!options || !options.names) {
-        return true
+      return isIdentifier(node.id) && names.includes(node.id.name)
+    }
+    if (isImportDeclaration(node)) {
+      node.specifiers = node.specifiers.filter(s => {
+        return isImportSpecifier(s) && isIdentifier(s.imported) && names.includes(s.imported.name)
+      })
+
+      if (node.specifiers.length === 0) {
+        return false
       }
 
-      return isIdentifier(node.id) && options.names.includes(node.id.name)
+      return true
     }
 
     if (isExportNamedDeclaration(node)) {
       if (isTSInterfaceDeclaration(node.declaration) || isTSTypeAliasDeclaration(node.declaration)) {
-        if (!options || !options.names) {
-          return true
-        }
-
-        return isIdentifier(node.declaration.id) && options.names.includes(node.declaration.id.name)
+        return isIdentifier(node.declaration.id) && names.includes(node.declaration.id.name)
       }
       return false
     }
@@ -40,5 +51,7 @@ export function parseTypes(code: string, options?: ParseTypesOptions) {
 
   res.program.body = filteredBody
 
-  return transformFromAstSync(res)?.code
+  return transformFromAstSync(res, code, {
+    configFile: false,
+  })?.code
 }

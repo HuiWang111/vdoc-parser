@@ -1,6 +1,9 @@
 export const typesCode = `
+import type { VNode, VNodeData } from 'vue'
+
 interface A {
   name: string;
+  node: VNode;
 }
 
 export interface B {
@@ -9,4 +12,4 @@ export interface B {
 
 type C = string | number
 
-export type D = C & number;`
+export type D = C & number;`.trim()
