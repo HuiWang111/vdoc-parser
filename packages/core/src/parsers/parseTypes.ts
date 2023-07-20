@@ -18,19 +18,32 @@ export function parseTypes(code: string, options?: ParseTypesOptions) {
     ]
   })
 
-  if (!options || !options.names) {
+  if (!options) {
     return code
   }
 
-  const { names } = options
+  const { names, excludeNames } = options
+
+  if (!names && !excludeNames) {
+    return code
+  }
+
+  const shouldInclude = (identifierName: string) => {
+    if (names) {
+      return names.includes(identifierName)
+    } else if (excludeNames) {
+      return !excludeNames.includes(identifierName)
+    }
+    return true
+  }
 
   const filteredBody = res.program.body.filter(node => {
     if (isTSInterfaceDeclaration(node) || isTSTypeAliasDeclaration(node)) {
-      return isIdentifier(node.id) && names.includes(node.id.name)
+      return isIdentifier(node.id) && shouldInclude(node.id.name)
     }
     if (isImportDeclaration(node)) {
       node.specifiers = node.specifiers.filter(s => {
-        return isImportSpecifier(s) && isIdentifier(s.imported) && names.includes(s.imported.name)
+        return isImportSpecifier(s) && isIdentifier(s.imported) && shouldInclude(s.imported.name)
       })
 
       if (node.specifiers.length === 0) {
@@ -42,7 +55,7 @@ export function parseTypes(code: string, options?: ParseTypesOptions) {
 
     if (isExportNamedDeclaration(node)) {
       if (isTSInterfaceDeclaration(node.declaration) || isTSTypeAliasDeclaration(node.declaration)) {
-        return isIdentifier(node.declaration.id) && names.includes(node.declaration.id.name)
+        return isIdentifier(node.declaration.id) && shouldInclude(node.declaration.id.name)
       }
       return false
     }

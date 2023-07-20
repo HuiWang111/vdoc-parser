@@ -39,4 +39,5 @@ export interface SfcResult {
 
 export interface ParseTypesOptions {
   names?: string[];
+  excludeNames?: string[];
 }

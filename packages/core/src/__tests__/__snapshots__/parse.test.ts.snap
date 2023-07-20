@@ -26,6 +26,18 @@ interface A {
 export type D = C & number;"
 `;
 
+exports[`test parseTypes method parseTypes method should work 3`] = `
+"import type { VNodeData } from 'vue';
+interface A {
+  name: string;
+  node: VNode;
+}
+export interface B {
+  age: number;
+}
+type C = string | number;"
+`;
+
 exports[`test parseTypesFile method parseTypesFile should work with .vue file 1`] = `
 "
 interface Person {
