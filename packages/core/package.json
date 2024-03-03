@@ -1,6 +1,6 @@
 {
   "name": "vdoc-parser",
-  "version": "1.0.0-beta.6",
+  "version": "1.0.0",
   "description": "vue props parser",
   "main": "lib/index.js",
   "module": "es/index.js",

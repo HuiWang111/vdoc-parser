@@ -3,6 +3,7 @@ import {
   isIdentifier,
   isObjectExpression,
   isArrayExpression,
+  isBooleanLiteral,
 } from '@babel/types'
 import { getPropertyByExpression } from '../utils'
 import { parsePropType } from './parsePropType'
@@ -13,7 +14,7 @@ import type { BuiltinResult } from '../types'
 export function parseProps(
   props: ObjectExpression,
   commentEndLine: number,
-): Pick<BuiltinResult, 'name' | 'type' | 'default'> | undefined {
+): Pick<BuiltinResult, 'name' | 'type' | 'default' | 'required'> | undefined {
   const prop = props.properties.find(p => {
     return isObjectProperty(p)
       && p.loc?.start.line === commentEndLine + 1
@@ -24,6 +25,7 @@ export function parseProps(
     if (isObjectExpression(prop.value)) {
       const propType = getPropertyByExpression(prop.value, 'type')
       const defaultProperty = getPropertyByExpression(prop.value, 'default')
+      const isRequired = getPropertyByExpression(prop.value, 'required')
       const parsedType = propType
         ? parsePropType(propType)
         : undefined
@@ -37,6 +39,9 @@ export function parseProps(
           : '',
         type: parsedType || '',
         default: defaultValue || '',
+        required: isRequired && isBooleanLiteral(isRequired.value) && isRequired.value.value
+          ? 'true'
+          : 'false'
       }
     } else if (isIdentifier(prop.value)) {
       return {
@@ -45,6 +50,7 @@ export function parseProps(
           : '',
         type: prop.value.name.toLowerCase(),
         default: '',
+        required: 'false',
       }
     } else if (isArrayExpression(prop.value)) {
       const type = prop.value.elements.reduce<string[]>((acc, el) => {
@@ -60,6 +66,7 @@ export function parseProps(
           : '',
         type,
         default: '',
+        required: 'false',
       }
     }
   }

@@ -9,6 +9,7 @@ export interface BuiltinResult {
   description: string;
   default: string;
   version: string;
+  required: 'true' | 'false';
 }
 
 export type ParsedResult<T extends Record<string, string> = {}> = BuiltinResult & T

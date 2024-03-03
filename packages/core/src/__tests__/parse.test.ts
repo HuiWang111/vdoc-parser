@@ -28,6 +28,7 @@ const parsedResult = [
     description: '是否禁用',
     default: 'false',
     version: '',
+    required: 'false',
   },
   {
     name: 'value',
@@ -35,6 +36,7 @@ const parsedResult = [
     description: '当前选中的值',
     default: '',
     version: '',
+    required: 'true',
   },
   {
     name: 'emptyOptions',
@@ -42,6 +44,7 @@ const parsedResult = [
     description: '选项列表，默认为空数组',
     default: '[]',
     version: '',
+    required: 'false',
   },
   {
     name: 'afterClose',
@@ -49,6 +52,7 @@ const parsedResult = [
     description: '关闭后的回调',
     default: '() => {}',
     version: '',
+    required: 'false',
   },
   {
     name: 'emptyRecord',
@@ -56,6 +60,7 @@ const parsedResult = [
     description: '数据对象，默认为空对象',
     default: '{}',
     version: '',
+    required: 'false',
   },
   {
     name: 'options',
@@ -63,6 +68,7 @@ const parsedResult = [
     description: '选项列表',
     default: `['1', '2']`,
     version: '',
+    required: 'false',
   },
   {
     name: 'count',
@@ -70,6 +76,7 @@ const parsedResult = [
     description: '数量',
     default: '1',
     version: '',
+    required: 'false',
   },
   {
     name: 'name',
@@ -77,6 +84,7 @@ const parsedResult = [
     description: '名称',
     default: "'xiaoming'",
     version: '1.2.1',
+    required: 'false',
   },
   {
     name: 'label',
@@ -84,6 +92,7 @@ const parsedResult = [
     description: '标签文本',
     default: '',
     version: '',
+    required: 'false',
   },
   {
     name: 'val',
@@ -91,6 +100,7 @@ const parsedResult = [
     description: '当前选中的值简写',
     default: '',
     version: '',
+    required: 'false',
   },
 ]
 
@@ -123,6 +133,7 @@ describe('test parse method', () => {
         description: '测试展开运算符',
         default: '',
         version: '',
+        required: 'false',
       },
       ...parsedResult,
     ])
@@ -148,6 +159,7 @@ describe('test parse method', () => {
         description: '用户id',
         default: '',
         version: '',
+        required: 'false',
       },
       ...parsedResult,
     ])

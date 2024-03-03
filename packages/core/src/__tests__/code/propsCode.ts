@@ -11,6 +11,7 @@ disabled: {
  */
 value: {
  type: [String, Number],
+ required: true,
 },
 /**
  * @description 选项列表，默认为空数组

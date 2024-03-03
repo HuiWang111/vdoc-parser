@@ -30,7 +30,7 @@ export function parseCode(code: string, {
     const endLine = c.loc?.end.line
     if (endLine) {
       const ast = doctrine.parse(`/*${c.value}\n*/`, { unwrap: true })
-      let propInfo: Pick<BuiltinResult, 'name' | 'type' | 'default'> | undefined
+      let propInfo: Pick<BuiltinResult, 'name' | 'type' | 'default' | 'required'> | undefined
       
       if (setup) {
         propInfo = parseSetupScript(res.program.body, endLine)
@@ -61,6 +61,7 @@ export function parseCode(code: string, {
           description: commentInfo.description,
           default: commentInfo.default || propInfo.default,
           version: commentInfo.version || '',
+          required: propInfo.required,
         })
       }
     }
