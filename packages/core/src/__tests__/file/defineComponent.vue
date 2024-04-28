@@ -79,6 +79,13 @@ export default defineComponent({
      * @description 当前选中的值简写
      */
     val: [String, Number],
+    /**
+     * @description 选中条目更新的事件函数
+     * @type {{key: '(value: string) => void'}}
+     */
+    onChange: {
+      type: Function,
+    },
   },
 })
 </script>

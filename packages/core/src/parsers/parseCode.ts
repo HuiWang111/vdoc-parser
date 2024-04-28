@@ -1,5 +1,6 @@
 import { parse as babelParse } from '@babel/parser'
 import doctrine from 'doctrine'
+import { isEventProp, lowerFirst } from '../utils'
 import { parseCommentTags } from './parseCommentTags'
 import { parseExport } from './parseExport'
 import { parseComponentOptions } from './parseComponentOptions'
@@ -51,17 +52,21 @@ export function parseCode(code: string, {
           throw new Error('Unknow parseType:' + type)
         }
       }
-
-      const commentInfo = parseCommentTags(ast.tags)
       
       if (propInfo) {
+        const commentInfo = parseCommentTags(ast.tags)
+        const isEvent = isEventProp(propInfo)
+
         parsed.push({
-          name: propInfo.name,
+          name: isEvent
+            ? lowerFirst(propInfo.name.replace(/^on/, ''))
+            : propInfo.name,
           type: commentInfo.type || propInfo.type,
           description: commentInfo.description,
           default: commentInfo.default || propInfo.default,
           version: commentInfo.version || '',
           required: propInfo.required,
+          isEvent,
         })
       }
     }

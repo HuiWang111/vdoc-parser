@@ -29,6 +29,7 @@ const parsedResult = [
     default: 'false',
     version: '',
     required: 'false',
+    isEvent: false,
   },
   {
     name: 'value',
@@ -37,6 +38,7 @@ const parsedResult = [
     default: '',
     version: '',
     required: 'true',
+    isEvent: false,
   },
   {
     name: 'emptyOptions',
@@ -45,6 +47,7 @@ const parsedResult = [
     default: '[]',
     version: '',
     required: 'false',
+    isEvent: false,
   },
   {
     name: 'afterClose',
@@ -53,6 +56,7 @@ const parsedResult = [
     default: '() => {}',
     version: '',
     required: 'false',
+    isEvent: false,
   },
   {
     name: 'emptyRecord',
@@ -61,6 +65,7 @@ const parsedResult = [
     default: '{}',
     version: '',
     required: 'false',
+    isEvent: false,
   },
   {
     name: 'options',
@@ -69,6 +74,7 @@ const parsedResult = [
     default: `['1', '2']`,
     version: '',
     required: 'false',
+    isEvent: false,
   },
   {
     name: 'count',
@@ -77,6 +83,7 @@ const parsedResult = [
     default: '1',
     version: '',
     required: 'false',
+    isEvent: false,
   },
   {
     name: 'name',
@@ -85,6 +92,7 @@ const parsedResult = [
     default: "'xiaoming'",
     version: '1.2.1',
     required: 'false',
+    isEvent: false,
   },
   {
     name: 'label',
@@ -93,6 +101,7 @@ const parsedResult = [
     default: '',
     version: '',
     required: 'false',
+    isEvent: false,
   },
   {
     name: 'val',
@@ -101,6 +110,16 @@ const parsedResult = [
     default: '',
     version: '',
     required: 'false',
+    isEvent: false,
+  },
+  {
+    name: 'change',
+    type: '(value: string) => void',
+    description: '选中条目更新的事件函数',
+    default: '',
+    version: '',
+    required: 'false',
+    isEvent: true,
   },
 ]
 
@@ -134,6 +153,7 @@ describe('test parse method', () => {
         default: '',
         version: '',
         required: 'false',
+        isEvent: false,
       },
       ...parsedResult,
     ])
@@ -160,6 +180,7 @@ describe('test parse method', () => {
         default: '',
         version: '',
         required: 'false',
+        isEvent: false,
       },
       ...parsedResult,
     ])

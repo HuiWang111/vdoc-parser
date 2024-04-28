@@ -17,6 +17,7 @@ import type {
   StatementExportType,
   ExportType,
   StatementExportDeclaration,
+  BuiltinResult,
 } from './types'
 
 export function getStatementExportType(type: ExportType): StatementExportType {
@@ -67,4 +68,14 @@ export function getPropertyByExpression(expression: ObjectExpression | null, pro
     .find(p => isObjectProperty(p)
       && isIdentifier(p.key)
       && p.key.name === propName) as ObjectProperty | null
+}
+
+export function lowerFirst(str?: string) {
+  if (!str) return ''
+
+  return `${str[0].toLowerCase()}${str.slice(1)}`
+}
+
+export function isEventProp(prop: Pick<BuiltinResult, 'name' | 'type' | 'default' | 'required'>) {
+  return prop.name.startsWith('on')
 }
