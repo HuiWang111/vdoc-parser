@@ -55,7 +55,7 @@ export function parseCode(code: string, {
       
       if (propInfo) {
         const commentInfo = parseCommentTags(ast.tags)
-        const isEvent = isEventProp(propInfo)
+        const isEvent = isEventProp(propInfo.name)
 
         parsed.push({
           name: isEvent

@@ -76,6 +76,6 @@ export function lowerFirst(str?: string) {
   return `${str[0].toLowerCase()}${str.slice(1)}`
 }
 
-export function isEventProp(prop: Pick<BuiltinResult, 'name' | 'type' | 'default' | 'required'>) {
-  return prop.name.startsWith('on')
+export function isEventProp(name: string) {
+  return /^on[A-Z][a-z]+/.test(name)
 }
