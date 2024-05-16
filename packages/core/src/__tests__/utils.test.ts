@@ -17,5 +17,6 @@ describe('test utils', () => {
 
     expect(isEventProp('onClick')).toBe(true)
     expect(isEventProp('onCl')).toBe(true)
+    expect(isEventProp('onClickPanel')).toBe(true)
   })
 })
