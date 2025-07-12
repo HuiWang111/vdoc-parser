@@ -218,7 +218,18 @@ describe('test parseFile method', () => {
 
   it('test parse vue file with defineProps inline generics', async () => {
     expect(await parseFile(join(__dirname, 'file/definePropsWithInlineGenerics.vue'))).toEqual(
-      parsedResult.filter(i => i.name !== 'change')
+      [
+        ...parsedResult.filter(i => i.name !== 'change'),
+        {
+          name: 'book',
+          type: 'Book',
+          description: '书本',
+          default: '',
+          version: '',
+          required: 'false',
+          isEvent: false,
+        },
+      ]
     )    
   })
 })

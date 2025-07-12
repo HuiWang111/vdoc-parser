@@ -5,6 +5,12 @@
 <script setup lang="ts">
 import type { PropType } from 'vue'
 
+interface Book {
+  title: string
+  author: string
+  year: number
+}
+
 const {
   disabled = false,
   value,
@@ -55,5 +61,9 @@ const {
    * @description 当前选中的值简写
    */
   val?: string | number,
+  /**
+   * @description 书本
+   */
+  book?: Book,
 }>()
 </script>
