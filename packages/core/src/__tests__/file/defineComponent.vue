@@ -32,7 +32,6 @@ export default defineComponent({
     },
     /**
      * @description 关闭后的回调
-     * @default () => {}
      */
     afterClose: {
       type: Function as PropType<() => void>,
@@ -46,7 +45,6 @@ export default defineComponent({
     },
     /**
      * @description 选项列表
-     * @default ['1', '2']
      */
     options: {
       type: Array as PropType<string[]>,

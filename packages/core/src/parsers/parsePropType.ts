@@ -15,9 +15,11 @@ export function parsePropType(node: ObjectProperty): string | undefined {
       }
       return acc
     }, []).join(' | ')
-  } else if (isIdentifier(node.value)) {
+  } 
+  if (isIdentifier(node.value)) {
     return node.value.name.toLowerCase()
-  } else if (isTSAsExpression(node.value)) {
+  }
+  if (isTSAsExpression(node.value)) {
     if (isTSTypeReference(node.value.typeAnnotation)) {
       if (node.value.typeAnnotation.typeParameters) {
         const typeParam = node.value.typeAnnotation.typeParameters.params[0]
@@ -26,9 +28,7 @@ export function parsePropType(node: ObjectProperty): string | undefined {
           try {
             const { code } = generate(typeParam as any)
             return code
-          } catch {
-            // 无法解析
-          }
+          } catch {}
         }
       }
     }

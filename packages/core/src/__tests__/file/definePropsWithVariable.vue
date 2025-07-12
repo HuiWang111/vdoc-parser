@@ -29,7 +29,6 @@ const props = defineProps({
   },
   /**
    * @description 关闭后的回调
-   * @default () => {}
    */
   afterClose: {
     type: Function as PropType<() => void>,
@@ -43,7 +42,6 @@ const props = defineProps({
   },
   /**
    * @description 选项列表
-   * @default ['1', '2']
    */
   options: {
     type: Array as PropType<string[]>,

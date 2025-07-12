@@ -53,7 +53,7 @@ const parsedResult = [
     name: 'afterClose',
     type: '() => void',
     description: '关闭后的回调',
-    default: '() => {}',
+    default: '',
     version: '',
     required: 'false',
     isEvent: false,

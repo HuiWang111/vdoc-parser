@@ -52,9 +52,9 @@ export function parseProps(
         name: isEvent
           ? lowerFirst(name.replace(/^on/, ''))
           : name,
-        type: commentInfo.type || parsedType || '',
+        type: parsedType || '',
         description: commentInfo.description,
-        default: commentInfo.default || defaultValue || '',
+        default: defaultValue || '',
         version: commentInfo.version || '',
         required: isRequired && isBooleanLiteral(isRequired.value) && isRequired.value.value
           ? 'true'
@@ -71,7 +71,7 @@ export function parseProps(
         name: isEvent
           ? lowerFirst(name.replace(/^on/, ''))
           : name,
-        type: commentInfo.type || prop.value.name.toLowerCase(),
+        type: prop.value.name.toLowerCase(),
         description: commentInfo.description,
         default: commentInfo.default || '',
         version: commentInfo.version || '',
@@ -94,7 +94,7 @@ export function parseProps(
         name: isEvent
           ? lowerFirst(name.replace(/^on/, ''))
           : name,
-        type: commentInfo.type || type,
+        type,
         description: commentInfo.description,
         default: commentInfo.default || '',
         version: commentInfo.version || '',
