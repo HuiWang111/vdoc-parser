@@ -15,15 +15,13 @@ value: {
 },
 /**
  * @description 选项列表，默认为空数组
- * @type {{key: 'string[]'}}
  */
 emptyOptions: {
- type: Array,
+ type: Array as PropType<string[]>,
  default: () => []
 },
 /**
  * @description 关闭后的回调
- * @type {{key: '() => void'}}
  * @default () => {}
  */
 afterClose: {
@@ -31,19 +29,17 @@ afterClose: {
 },
 /**
  * @description 数据对象，默认为空对象
- * @type {{key: 'Record<string, unknow>'}}
  */
 emptyRecord: {
- type: Object,
+ type: Object as PropType<Record<string, unknown>>,
  default: () => ({}),
 },
 /**
  * @description 选项列表
- * @type {{key: 'string[]'}}
  * @default ['1', '2']
  */
 options: {
- type: Array,
+ type: Array as PropType<string[]>,
  default: () => ['1', '2'],
 },
 /**
@@ -71,8 +67,7 @@ label: String,
 val: [String, Number],
 /**
  * @description 选中条目更新的事件函数
- * @type {{key: '(value: string) => void'}}
  */
 onChange: {
-  type: Function,
+  type: Function as PropType<(value: string) => void>,
 },`.trim()

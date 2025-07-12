@@ -60,7 +60,7 @@ const parsedResult = [
   },
   {
     name: 'emptyRecord',
-    type: 'Record<string, unknow>',
+    type: 'Record<string, unknown>',
     description: '数据对象，默认为空对象',
     default: '{}',
     version: '',

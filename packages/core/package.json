@@ -34,10 +34,12 @@
   "license": "ISC",
   "devDependencies": {
     "@types/babel__core": "^7.20.1",
+    "@types/babel__generator": "^7.27.0",
     "@types/doctrine": "^0.0.5"
   },
   "dependencies": {
     "@babel/core": "^7.22.8",
+    "@babel/generator": "^7.28.0",
     "@babel/parser": "^7.22.4",
     "@babel/types": "^7.22.4",
     "@vue/compiler-sfc": "2.7.14",

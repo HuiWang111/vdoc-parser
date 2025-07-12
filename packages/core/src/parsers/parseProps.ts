@@ -30,7 +30,7 @@ export function parseProps(
     if (lastComment.type !== 'CommentBlock') {
       return acc
     }
-    const { tags } = doctrine.parse(`/*${lastComment.value}\n*/`, { unwrap: true })
+    const { tags } = doctrine.parse(`/*${lastComment.value}*/`, { unwrap: true })
     const commentInfo = parseCommentTags(tags)
 
     if (isObjectExpression(prop.value)) {
