@@ -8,13 +8,12 @@ import type { ObjectExpression } from '@babel/types'
 
 export function parseComponentOptions(
   options: ObjectExpression,
-  commentEndLine: number,
-): Pick<BuiltinResult, 'name' | 'type' | 'default' | 'required'> | undefined {
+): Array<BuiltinResult> | undefined {
   const props = getPropertyByExpression(options, 'props')
 
   if (!props) return
 
   if (isObjectExpression(props.value)) {
-    return parseProps(props.value, commentEndLine)
+    return parseProps(props.value)
   }
 }

@@ -1,3 +1,4 @@
+import doctrine from 'doctrine'
 import {
   isObjectProperty,
   isIdentifier,
@@ -5,23 +6,33 @@ import {
   isArrayExpression,
   isBooleanLiteral,
 } from '@babel/types'
-import { getPropertyByExpression } from '../utils'
+import { getPropertyByExpression, isEventProp, lowerFirst } from '../utils'
 import { parsePropType } from './parsePropType'
 import { parseDefaultValue } from './parseDefaultValue'
 import type { ObjectExpression } from '@babel/types'
 import type { BuiltinResult } from '../types'
+import { parseCommentTags } from './parseCommentTags'
 
 export function parseProps(
   props: ObjectExpression,
-  commentEndLine: number,
-): Pick<BuiltinResult, 'name' | 'type' | 'default' | 'required'> | undefined {
-  const prop = props.properties.find(p => {
-    return isObjectProperty(p)
-      && p.loc?.start.line === commentEndLine + 1
-      && isIdentifier(p.key)
-  })
+): BuiltinResult[] {
+  return props.properties.reduce<BuiltinResult[]>((acc, prop) => {
+    if (
+      !isObjectProperty(prop)
+      || !isIdentifier(prop.key)
+      || !prop.leadingComments
+      || !prop.leadingComments.length
+    ) {
+      return acc
+    }
 
-  if (prop && isObjectProperty(prop)) {
+    const lastComment = prop.leadingComments[prop.leadingComments.length - 1]
+    if (lastComment.type !== 'CommentBlock') {
+      return acc
+    }
+    const { tags } = doctrine.parse(`/*${lastComment.value}\n*/`, { unwrap: true })
+    const commentInfo = parseCommentTags(tags)
+
     if (isObjectExpression(prop.value)) {
       const propType = getPropertyByExpression(prop.value, 'type')
       const defaultProperty = getPropertyByExpression(prop.value, 'default')
@@ -32,26 +43,41 @@ export function parseProps(
       const defaultValue = defaultProperty
         ? parseDefaultValue(defaultProperty)
         : undefined
+      const name = isIdentifier(prop.key)
+        ? prop.key.name
+        : ''
+      const isEvent = isEventProp(name)
       
-      return {
-        name: isIdentifier(prop.key)
-          ? prop.key.name
-          : '',
-        type: parsedType || '',
-        default: defaultValue || '',
+      acc.push({
+        name: isEvent
+          ? lowerFirst(name.replace(/^on/, ''))
+          : name,
+        type: commentInfo.type || parsedType || '',
+        description: commentInfo.description,
+        default: commentInfo.default || defaultValue || '',
+        version: commentInfo.version || '',
         required: isRequired && isBooleanLiteral(isRequired.value) && isRequired.value.value
           ? 'true'
-          : 'false'
-      }
+          : 'false',
+        isEvent,
+      })
     } else if (isIdentifier(prop.value)) {
-      return {
-        name: isIdentifier(prop.key)
-          ? prop.key.name
-          : '',
-        type: prop.value.name.toLowerCase(),
-        default: '',
+      const name = isIdentifier(prop.key)
+        ? prop.key.name
+        : ''
+      const isEvent = isEventProp(name)
+
+      acc.push({
+        name: isEvent
+          ? lowerFirst(name.replace(/^on/, ''))
+          : name,
+        type: commentInfo.type || prop.value.name.toLowerCase(),
+        description: commentInfo.description,
+        default: commentInfo.default || '',
+        version: commentInfo.version || '',
         required: 'false',
-      }
+        isEvent,
+      })
     } else if (isArrayExpression(prop.value)) {
       const type = prop.value.elements.reduce<string[]>((acc, el) => {
         if (el?.type === 'Identifier') {
@@ -59,15 +85,24 @@ export function parseProps(
         }
         return acc
       }, []).join(' | ')
+      const name = isIdentifier(prop.key)
+        ? prop.key.name
+        : ''
+      const isEvent = isEventProp(name)
 
-      return {
-        name: isIdentifier(prop.key)
-          ? prop.key.name
-          : '',
-        type,
-        default: '',
+      acc.push({
+        name: isEvent
+          ? lowerFirst(name.replace(/^on/, ''))
+          : name,
+        type: commentInfo.type || type,
+        description: commentInfo.description,
+        default: commentInfo.default || '',
+        version: commentInfo.version || '',
         required: 'false',
-      }
+        isEvent,
+      })
     }
-  }
+
+    return acc
+  }, [])
 }

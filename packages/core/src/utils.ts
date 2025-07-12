@@ -11,13 +11,11 @@ import type {
   VariableDeclarator,
   CallExpression,
   ObjectProperty,
-  Node,
 } from '@babel/types'
 import type {
   StatementExportType,
   ExportType,
   StatementExportDeclaration,
-  BuiltinResult,
 } from './types'
 
 export function getStatementExportType(type: ExportType): StatementExportType {
