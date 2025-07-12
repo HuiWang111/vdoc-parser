@@ -1,12 +1,15 @@
 import {
+  isCallExpression,
   isExpressionStatement,
   isObjectExpression,
+  isTSTypeLiteral,
   isVariableDeclaration,
 } from '@babel/types'
 import { getCallExpressionArguments } from '../utils'
 import type { BuiltinResult } from '../types'
 import { parseProps } from './parseProps'
 import type { Statement } from '@babel/types'
+import { parseTSTypeLiteral } from './parseTSTypeLiteral'
 
 export function parseSetupScript(
   statements: Statement[],
@@ -19,10 +22,18 @@ export function parseSetupScript(
         return parseProps(args[0])
       }
     } else if (isVariableDeclaration(statement) && statement.declarations.length) {
-      const args = getCallExpressionArguments(statement.declarations[0].init, 'defineProps')
+      const expression = statement.declarations[0].init
+      const args = getCallExpressionArguments(expression, 'defineProps')
       
       if (args.length && isObjectExpression(args[0])) {
         return parseProps(args[0])
+      } else if (isCallExpression(expression) && expression.typeParameters) {
+        const { params } = expression.typeParameters
+        const typeParam = params[0]
+
+        if (isTSTypeLiteral(typeParam)) {
+          return parseTSTypeLiteral(typeParam, statement.declarations[0].id)
+        }
       }
     }
   }

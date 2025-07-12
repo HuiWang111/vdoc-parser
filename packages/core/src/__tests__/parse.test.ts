@@ -89,7 +89,7 @@ const parsedResult = [
     name: 'name',
     type: 'string',
     description: '名称',
-    default: "'xiaoming'",
+    default: "\"xiaoming\"",
     version: '1.2.1',
     required: 'false',
     isEvent: false,
@@ -214,6 +214,12 @@ describe('test parseFile method', () => {
 
   it('test parse vue file with defineProps variable', async () => {
     expect(await parseFile(join(__dirname, 'file/definePropsWithVariable.vue'))).toEqual(parsedResult)
+  })
+
+  it('test parse vue file with defineProps inline generics', async () => {
+    expect(await parseFile(join(__dirname, 'file/definePropsWithInlineGenerics.vue'))).toEqual(
+      parsedResult.filter(i => i.name !== 'change')
+    )    
   })
 })
 

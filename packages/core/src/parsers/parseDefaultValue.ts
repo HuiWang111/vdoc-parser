@@ -14,6 +14,7 @@ export function parseDefaultValue(defaultValue: ObjectProperty) {
       return code
     } catch {}
   }
+  
   if (
     isBooleanLiteral(defaultValue.value)
     || isNumericLiteral(defaultValue.value)
@@ -21,6 +22,6 @@ export function parseDefaultValue(defaultValue: ObjectProperty) {
     return String(defaultValue.value.value)
   }
   if (isStringLiteral(defaultValue.value)) {
-    return `'${defaultValue.value.value}'`
+    return `"${defaultValue.value.value}"`
   }
 }
