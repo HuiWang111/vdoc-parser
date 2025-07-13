@@ -1,4 +1,3 @@
-import doctrine from 'doctrine'
 import {
   isObjectProperty,
   isIdentifier,
@@ -9,9 +8,9 @@ import {
 import { getPropertyByExpression, isEventProp, lowerFirst } from '../utils'
 import { parsePropType } from './parsePropType'
 import { parseDefaultValue } from './parseDefaultValue'
+import { parseCommentBlock } from './parseCommentBlock'
 import type { ObjectExpression } from '@babel/types'
 import type { BuiltinResult } from '../types'
-import { parseCommentTags } from './parseCommentTags'
 
 export function parseProps(
   props: ObjectExpression,
@@ -30,8 +29,7 @@ export function parseProps(
     if (lastComment.type !== 'CommentBlock') {
       return acc
     }
-    const { tags } = doctrine.parse(`/*${lastComment.value}*/`, { unwrap: true })
-    const commentInfo = parseCommentTags(tags)
+    const commentInfo = parseCommentBlock(lastComment)
 
     if (isObjectExpression(prop.value)) {
       const propType = getPropertyByExpression(prop.value, 'type')

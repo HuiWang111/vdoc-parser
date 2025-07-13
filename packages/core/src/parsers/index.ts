@@ -1,4 +1,4 @@
-export { parseCommentTags } from './parseCommentTags'
+export { parseCommentBlock } from './parseCommentBlock'
 
 export { parseComponentOptions } from './parseComponentOptions'
 

@@ -1,17 +1,18 @@
-import doctrine from 'doctrine'
 import generate from '@babel/generator'
-import { isIdentifier, isTSPropertySignature, LVal, type TSTypeLiteral } from '@babel/types'
+import { isIdentifier, isTSPropertySignature, LVal, TSTypeElement } from '@babel/types'
 import type { BuiltinResult } from '../types'
-import { parseCommentTags } from './parseCommentTags'
+import { parseCommentBlock } from './parseCommentBlock'
 import { parseObjectPattern } from './parseObjectPattern'
 
 export function parseTSTypeLiteral(
-  typeParam: TSTypeLiteral,
-  id: LVal,
+  elements: TSTypeElement[],
+  id?: LVal,
 ): BuiltinResult[] {
-  const defaultValues = parseObjectPattern(id)
+  const defaultValues = id
+    ? parseObjectPattern(id)
+    : null
   
-  return typeParam.members.reduce<BuiltinResult[]>((acc, member) => {
+  return elements.reduce<BuiltinResult[]>((acc, member) => {
     if (!member.leadingComments || !member.leadingComments.length) {
       return acc
     }
@@ -24,8 +25,7 @@ export function parseTSTypeLiteral(
       return acc
     }
 
-    const { tags } = doctrine.parse(`/*${lastComment.value}*/`, { unwrap: true })
-    const commentInfo = parseCommentTags(tags)
+    const commentInfo = parseCommentBlock(lastComment)
     let type = ''
     try {
       if (member.typeAnnotation?.typeAnnotation) {

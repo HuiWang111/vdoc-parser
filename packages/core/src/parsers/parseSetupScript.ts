@@ -1,40 +1,22 @@
 import {
-  isCallExpression,
   isExpressionStatement,
-  isObjectExpression,
-  isTSTypeLiteral,
   isVariableDeclaration,
 } from '@babel/types'
-import { getCallExpressionArguments } from '../utils'
 import type { BuiltinResult } from '../types'
-import { parseProps } from './parseProps'
 import type { Statement } from '@babel/types'
-import { parseTSTypeLiteral } from './parseTSTypeLiteral'
+import { parseDefineProps } from './parseDefineProps'
 
 export function parseSetupScript(
   statements: Statement[],
 ): Array<BuiltinResult> | undefined {
   for (const statement of statements) {
     if (isExpressionStatement(statement)) {
-      const args = getCallExpressionArguments(statement.expression, 'defineProps')
-      
-      if (args.length && isObjectExpression(args[0])) {
-        return parseProps(args[0])
-      }
-    } else if (isVariableDeclaration(statement) && statement.declarations.length) {
+      return parseDefineProps(statement.expression, statements)
+    }
+    
+    if (isVariableDeclaration(statement) && statement.declarations.length) {
       const expression = statement.declarations[0].init
-      const args = getCallExpressionArguments(expression, 'defineProps')
-      
-      if (args.length && isObjectExpression(args[0])) {
-        return parseProps(args[0])
-      } else if (isCallExpression(expression) && expression.typeParameters) {
-        const { params } = expression.typeParameters
-        const typeParam = params[0]
-
-        if (isTSTypeLiteral(typeParam)) {
-          return parseTSTypeLiteral(typeParam, statement.declarations[0].id)
-        }
-      }
+      return parseDefineProps(expression, statements, statement.declarations[0].id)
     }
   }
 }
