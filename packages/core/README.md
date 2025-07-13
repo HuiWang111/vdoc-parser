@@ -128,7 +128,9 @@ await parseFile('./props.ts', {
   type: 'string',
   description: '姓名',
   default: 'xiaoming',
-  version: ''
+  version: '',
+  required: 'false',
+  isEvent: false,
 }
 ```
 
@@ -158,20 +160,21 @@ await parseFile('./props.ts', {
   type: 'string | number',
   description: '当前选中条目',
   default: '',
-  version: '1.2.3'
+  version: '1.2.3',
+  required: 'false',
+  isEvent: false,
 }
 ```
 
 ### 3. 复杂类型注释
 
-当使用 PropType 定义复杂类型时，需要通过注释声明类型：
+支持自动解析 PropType 的泛型参数
 
 ```typescript
 {
   props: {
     /**
      * @description 列表
-     * @type {{key: 'Record<string, string>[]'}}
      */
     list: {
       type: Array as PropType<Record<string, string>[]>,
@@ -189,13 +192,63 @@ await parseFile('./props.ts', {
   type: 'Record<string, string>[]',
   description: '列表',
   default: '[]',
-  version: ''
+  version: '',
+  required: 'false',
+  isEvent: false,
 }
 ```
 
-注意：当默认值是对象或数组时：
-- 空数组或空对象可以通过分析 props 对象获得
-- 非空数组或对象需要通过 `@default [1, 2, 3]` 这样的注释来声明默认值
+### 4. defineProps TypeLiteral
+
+```typescript
+defineProps<{
+  /**
+   * @description 列表
+   */
+  list?: Record<string, string>[]
+}>()
+```
+
+将生成：
+
+```typescript
+{
+  name: 'list',
+  type: 'Record<string, string>[]',
+  description: '列表',
+  default: '',
+  version: '',
+  required: 'false',
+  isEvent: false,
+}
+```
+
+### 4. defineProps TypeReference
+
+```typescript
+interface Props {
+  /**
+   * @description 列表
+   */
+  list?: Record<string, string>[]
+}
+
+const { list = [] } = defineProps<Props>()
+```
+
+将生成：
+
+```typescript
+{
+  name: 'list',
+  type: 'Record<string, string>[]',
+  description: '列表',
+  default: '[]',
+  version: '',
+  required: 'false',
+  isEvent: false,
+}
+```
 
 ## API 参考
 
@@ -265,4 +318,3 @@ interface ParsedResult {
 2. 使用 TypeScript 类型定义时，建议使用 JSDoc 注释来提供属性描述
 3. 具名导出组件时不支持通过 `exportName` 指定解析目标（遵循一个文件一个组件原则）
 4. 支持解析展开运算符（spread operator）的 Props 定义
-5. 对于复杂的默认值（非空数组/对象），需要使用 `@default` 注释显式声明 
