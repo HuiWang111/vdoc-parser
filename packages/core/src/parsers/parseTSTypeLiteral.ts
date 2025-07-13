@@ -1,15 +1,15 @@
 import generate from '@babel/generator'
 import { isIdentifier, isTSPropertySignature, LVal, TSTypeElement } from '@babel/types'
-import type { BuiltinResult } from '../types'
 import { parseCommentBlock } from './parseCommentBlock'
-import { parseObjectPattern } from './parseObjectPattern'
+import { parseDefaultValuesFromObjectPattern } from './parseDefaultValue'
+import type { BuiltinResult } from '../types'
 
 export function parseTSTypeLiteral(
   elements: TSTypeElement[],
   id?: LVal,
 ): BuiltinResult[] {
   const defaultValues = id
-    ? parseObjectPattern(id)
+    ? parseDefaultValuesFromObjectPattern(id)
     : null
   
   return elements.reduce<BuiltinResult[]>((acc, member) => {
